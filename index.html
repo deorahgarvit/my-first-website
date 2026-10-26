@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garvit Deorah — Independent Systems Engineer & Applied AI Researcher</title>
+  
+  <!-- Typography: Fraunces (Editorial Display Serif) & JetBrains Mono (Technical Monospace) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            linen: '#F7F5F0',
+            'linen-dim': '#EFECE6',
+            'linen-border': '#DFD9CE',
+            'espresso': '#1C1A17',
+            'espresso-soft': '#2E2B27',
+            'espresso-muted': '#7C766C',
+            'terracotta': '#D34524',
+            'terracotta-dark': '#AF3316',
+            'forest': '#2E4036',
+            'forest-light': '#E9EFEA',
+            'stone-tag': '#E5E0D5',
+          },
+          fontFamily: {
+            serif: ['"Fraunces"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          letterSpacing: {
+            'tighter-editorial': '-0.035em',
+            'widest-tech': '0.12em',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::selection {
+      background-color: #D34524;
+      color: #F7F5F0;
+    }
+    
+    body {
+      background-color: #F7F5F0;
+      color: #1C1A17;
+      font-family: 'JetBrains Mono', monospace;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Subtle paper grain texture overlay */
+    .bg-grain {
+      background-image: radial-gradient(rgba(28, 26, 23, 0.045) 1px, transparent 0);
+      background-size: 22px 22px;
+    }
+
+    .border-rule {
+      border-color: #DFD9CE;
+    }
+
+    *:focus-visible {
+      outline: 2px solid #D34524;
+      outline-offset: 3px;
+    }
+
+    .drawer-panel {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .drawer-open {
+      transform: translateX(0);
+    }
+    .drawer-closed {
+      transform: translateX(100%);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F5F0;
+      border-left: 1px solid #DFD9CE;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DFD9CE;
+      border-radius: 0;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #7C766C;
+    }
+  </style>
+</head>
+<body class="bg-linen text-espresso bg-grain min-h-screen relative overflow-x-hidden selection:bg-terracotta selection:text-linen">
+
+  <!-- ================= TOP ARCHIVAL HUD / TELEMETRY ================= -->
+  <header class="sticky top-0 z-40 bg-linen/90 backdrop-blur-md border-b border-rule">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between text-xs tracking-tight">
+      
+      <!-- Identity & Title -->
+      <div class="flex items-center gap-3">
+        <a href="#hero" class="group flex items-center gap-2 font-mono font-medium hover:text-terracotta transition-colors">
+          <span class="w-2.5 h-2.5 bg-terracotta inline-block group-hover:scale-125 transition-transform"></span>
+          <span class="font-bold tracking-widest-tech uppercase text-[11px]">GARVIT DEORAH</span>
+        </a>
+        <span class="hidden md:inline-block text-espresso-muted font-light">/</span>
+        <span class="hidden md:inline-block px-2 py-0.5 rounded-none bg-forest/10 text-forest text-[10px] font-mono tracking-wide font-medium">INDEPENDENT SYSTEMS ARCHITECT</span>
+      </div>
+
+      <!-- Live Clocks & Nav Links -->
+      <div class="flex items-center gap-6">
+        <div class="hidden sm:flex items-center gap-4 text-espresso-muted font-mono text-[11px] border-r border-rule pr-4">
+          <div class="flex items-center gap-1.5" title="Local Time">
+            <span class="w-1.5 h-1.5 rounded-full bg-forest animate-pulse"></span>
+            <span class="text-espresso font-semibold" id="clock-local">00:00:00</span>
+            <span class="text-[9px] uppercase tracking-wider text-espresso-muted">LOC</span>
+          </div>
+          <div class="flex items-center gap-1.5" title="Universal Coordinated Time">
+            <span class="text-espresso font-semibold" id="clock-utc">00:00:00</span>
+            <span class="text-[9px] uppercase tracking-wider text-espresso-muted">UTC</span>
+          </div>
+        </div>
+
+        <nav class="flex items-center gap-4 font-mono text-xs">
+          <a href="#manifesto" class="hover:text-terracotta transition-colors underline-offset-4 hover:underline">01/LOG</a>
+          <a href="#work" class="hover:text-terracotta transition-colors underline-offset-4 hover:underline">02/SYSTEMS</a>
+          <a href="#architecture" class="hover:text-terracotta transition-colors underline-offset-4 hover:underline">03/STACK</a>
+          <button id="toggle-spec-btn" class="bg-espresso text-linen px-3 py-1.5 rounded-none border border-espresso hover:bg-terracotta hover:border-terracotta transition-all flex items-center gap-1.5 text-[11px] font-mono font-medium shadow-sm active:translate-y-0.5">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span>CONSOLE</span>
+          </button>
+        </nav>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= HERO EDITORIAL SECTION ================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20">
+    <section id="hero" class="border-b border-rule pb-16">
+      
+      <!-- Meta Telemetry Header -->
+      <div class="flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-espresso-muted mb-8 tracking-widest-tech uppercase border-b border-rule pb-3">
+        <div class="flex items-center gap-2">
+          <span>INDEX NO. GD-SYS-2026</span>
+          <span class="text-linen-border">|</span>
+          <span>AUTONOMOUS INFRASTRUCTURE &amp; DISTRIBUTED INTELLIGENCE</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="inline-block w-2 h-2 rounded-full bg-forest"></span>
+          <span class="text-espresso font-semibold">INDEPENDENT PRACTICE &bull; AVAILABLE FOR ARCHITECTURE</span>
+        </div>
+      </div>
+
+      <!-- Main Editorial Lead -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-8">
+          <h1 class="font-serif text-5xl sm:text-7xl lg:text-8xl tracking-tighter-editorial leading-[0.94] text-espresso font-normal">
+            Engineering <span class="italic font-light text-terracotta">low-latency</span> systems &amp; distributed runtime models.
+          </h1>
+          <p class="mt-8 text-base sm:text-lg text-espresso-muted font-mono leading-relaxed max-w-2xl font-light">
+            I am <strong class="text-espresso font-medium">Garvit Deorah</strong>, an independent systems engineer and applied AI researcher. I architect deterministic network security pipelines, sub-80ms voice streaming architectures, edge multi-modal perceptual models, and distributed local-first mesh fabrics.
+          </p>
+
+          <!-- Action Controls -->
+          <div class="mt-10 flex flex-wrap items-center gap-4 pt-2">
+            <a href="#work" class="px-6 py-3.5 bg-espresso text-linen font-mono text-xs uppercase tracking-widest-tech border border-espresso hover:bg-terracotta hover:border-terracotta transition-all shadow-sm flex items-center gap-3">
+              <span>VIEW VERIFIED ARCHITECTURES</span>
+              <span class="text-sm">↓</span>
+            </a>
+            
+            <button id="copy-email-hero" data-copy="garvitdeorah@gmail.com" class="px-5 py-3.5 bg-linen text-espresso font-mono text-xs border border-rule hover:border-espresso hover:bg-stone-tag transition-all flex items-center gap-2">
+              <svg class="w-4 h-4 text-espresso-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/>
+              </svg>
+              <span id="hero-copy-text">garvitdeorah@gmail.com</span>
+            </button>
+
+            <button id="audio-toggle" class="px-4 py-3.5 border border-rule text-espresso-muted hover:text-espresso font-mono text-xs flex items-center gap-2 hover:bg-linen-dim transition-colors" title="Toggle tactile mechanical feedback clicks">
+              <span id="audio-icon">🔈</span>
+              <span id="audio-state">SOUND: OFF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Archival Telemetry Dossier Panel -->
+        <div class="lg:col-span-4 border border-rule bg-linen-dim/70 p-6 flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] uppercase font-mono tracking-widest-tech text-espresso-muted pb-3 border-b border-rule flex justify-between items-center">
+              <span>RESEARCH &amp; SYSTEMS DOSSIER</span>
+              <span class="text-terracotta font-bold">VERIFIED</span>
+            </div>
+            
+            <div class="mt-4 space-y-4 font-mono text-xs">
+              <div>
+                <span class="text-espresso-muted block text-[10px] uppercase">Practice Mode</span>
+                <span class="font-semibold text-espresso">Independent Systems Research</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-1 border-t border-rule/70">
+                <div>
+                  <span class="text-espresso-muted block text-[10px] uppercase">Core Latency</span>
+                  <span class="text-espresso">&lt; 80ms Voice Loops</span>
+                </div>
+                <div>
+                  <span class="text-espresso-muted block text-[10px] uppercase">Infrastructure</span>
+                  <span class="text-espresso">eBPF, Rust, P2P</span>
+                </div>
+              </div>
+              <div class="pt-1 border-t border-rule/70">
+                <span class="text-espresso-muted block text-[10px] uppercase">Primary Research Pillars</span>
+                <p class="text-espresso text-[11px] leading-relaxed mt-1">
+                  Local-first LLM mesh topologies, zero-knowledge secrets orchestration, real-time audio perception, and deterministic execution state-machines.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between text-[11px] font-mono text-espresso-muted">
+            <span>INDEX RUNTIME: ZERO DEPENDENCIES</span>
+            <span class="text-forest font-semibold">● ACTIVE</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= THESIS / PHILOSOPHY ================= -->
+    <section id="manifesto" class="py-16 border-b border-rule">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <div class="md:col-span-3">
+          <div class="sticky top-20">
+            <span class="text-[11px] font-mono uppercase tracking-widest-tech text-terracotta block mb-2 font-semibold">01 / PRINCIPLES</span>
+            <h2 class="font-serif text-3xl text-espresso font-normal leading-tight">Mechanical Craftsmanship Over Generic Patterns</h2>
+          </div>
+        </div>
+        <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-8 text-sm font-mono text-espresso leading-relaxed">
+          <div class="border-l-2 border-terracotta pl-6">
+            <h3 class="font-bold text-xs uppercase tracking-widest-tech mb-3 text-espresso">Determinism Under Adversarial Conditions</h3>
+            <p class="text-espresso-muted font-light mb-4">
+              Modern engineering is often diluted by brittle microservice abstractions and opaque frameworks. High-reliability computing requires direct access to kernel events, explicit memory safety, and verifiable mathematical boundaries.
+            </p>
+            <p class="text-espresso-muted font-light">
+              Every system I build begins with strict performance budgets: predictable allocation ceilings, zero-copy socket transfers, and automated sandbox self-healing.
+            </p>
+          </div>
+          <div class="border-l-2 border-forest pl-6">
+            <h3 class="font-bold text-xs uppercase tracking-widest-tech mb-3 text-espresso">Autonomous Local-First Intelligence</h3>
+            <p class="text-espresso-muted font-light mb-4">
+              True technological sovereignty lies in edge survivability. Distributed intelligence must remain functional and private even when centralized data centers and upstream gateways disconnect.
+            </p>
+            <p class="text-espresso-muted font-light">
+              By pairing compact quantized transformers with P2P mesh transport, high-throughput systems can execute cognitive workloads locally with microsecond-level coordination.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SYSTEMS & REPERTORY (PROJECTS) ================= -->
+    <section id="work" class="py-16 border-b border-rule">
+      
+      <!-- Section Header with Category Filters -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-rule">
+        <div>
+          <span class="text-[11px] font-mono uppercase tracking-widest-tech text-terracotta block mb-2 font-semibold">02 / ARCHITECTURAL ARCHIVE</span>
+          <h2 class="font-serif text-4xl sm:text-5xl text-espresso font-normal">Deployed Systems &amp; R&amp;D</h2>
+          <p class="font-mono text-xs text-espresso-muted mt-2">Filter and inspect engineering benchmarks, stack primitives, and architectural specifications.</p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
+          <button data-filter="all" class="filter-pill px-3.5 py-1.5 bg-espresso text-linen border border-espresso hover:bg-terracotta hover:border-terracotta transition-colors active">ALL [6]</button>
+          <button data-filter="systems" class="filter-pill px-3.5 py-1.5 bg-linen border border-rule hover:border-espresso hover:bg-stone-tag transition-colors">DISTRIBUTED SYSTEMS</button>
+          <button data-filter="ai" class="filter-pill px-3.5 py-1.5 bg-linen border border-rule hover:border-espresso hover:bg-stone-tag transition-colors">APPLIED AI &amp; VOICE</button>
+          <button data-filter="security" class="filter-pill px-3.5 py-1.5 bg-linen border border-rule hover:border-espresso hover:bg-stone-tag transition-colors">SECURITY &amp; DEFENSE</button>
+        </div>
+      </div>
+
+      <!-- Project Cards Grid -->
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- 1. Shadow Guardian -->
+        <article data-category="security" class="project-card border border-rule bg-linen p-6 flex flex-col justify-between hover:border-espresso transition-all group cursor-pointer relative" onclick="openSpecModal('shadow-guardian')">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[11px] text-espresso-muted pb-4 border-b border-rule">
+              <span class="font-bold text-terracotta">SEC-01 // PRODUCTION</span>
+              <span>2025</span>
+            </div>
+            <div class="mt-5">
+              <h3 class="font-serif text-2xl text-espresso group-hover:text-terracotta transition-colors">Shadow Guardian</h3>
+              <p class="font-mono text-xs text-espresso-muted mt-3 leading-relaxed">
+                Autonomous network security monitor and endpoint sentinel. Intercepts anomalous telemetry using eBPF kernel hooks, automates rapid sandbox isolation, and performs zero-knowledge log verification.
+              </p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-1.5 font-mono text-[10px]">
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Rust</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">eBPF</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Linux RingBuffer</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Zero-Trust</span>
+            </div>
+          </div>
+          <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between font-mono text-xs">
+            <span class="text-espresso-muted group-hover:text-espresso">Role: Systems Architect</span>
+            <span class="text-terracotta font-semibold text-sm">SPEC INSPECTOR →</span>
+          </div>
+        </article>
+
+        <!-- 2. Secreto Sperren -->
+        <article data-category="security" class="project-card border border-rule bg-linen p-6 flex flex-col justify-between hover:border-espresso transition-all group cursor-pointer relative" onclick="openSpecModal('secreto-sperren')">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[11px] text-espresso-muted pb-4 border-b border-rule">
+              <span class="font-bold text-forest">CRYPT-02 // CORE</span>
+              <span>2024</span>
+            </div>
+            <div class="mt-5">
+              <h3 class="font-serif text-2xl text-espresso group-hover:text-terracotta transition-colors">Secreto Sperren</h3>
+              <p class="font-mono text-xs text-espresso-muted mt-3 leading-relaxed">
+                Zero-knowledge credential orchestrator and secret encapsulation vault. Employs split-key Shamir Secret Sharing with TPM 2.0 hardware binding to protect secrets in untrusted environments.
+              </p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-1.5 font-mono text-[10px]">
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Go</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Shamir (k-of-n)</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">TPM 2.0</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">ChaCha20-Poly1305</span>
+            </div>
+          </div>
+          <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between font-mono text-xs">
+            <span class="text-espresso-muted group-hover:text-espresso">Role: Cryptographic Eng</span>
+            <span class="text-terracotta font-semibold text-sm">SPEC INSPECTOR →</span>
+          </div>
+        </article>
+
+        <!-- 3. NetMind -->
+        <article data-category="systems" class="project-card border border-rule bg-linen p-6 flex flex-col justify-between hover:border-espresso transition-all group cursor-pointer relative" onclick="openSpecModal('netmind')">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[11px] text-espresso-muted pb-4 border-b border-rule">
+              <span class="font-bold text-terracotta">DIST-03 // RUNTIME</span>
+              <span>2025</span>
+            </div>
+            <div class="mt-5">
+              <h3 class="font-serif text-2xl text-espresso group-hover:text-terracotta transition-colors">NetMind Mesh</h3>
+              <p class="font-mono text-xs text-espresso-muted mt-3 leading-relaxed">
+                Distributed local LLM compute mesh and peer-to-peer execution scheduler. Dynamic self-healing topology that automatically coordinates tensor-parallel inference across heterogeneous edge nodes.
+              </p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-1.5 font-mono text-[10px]">
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">C++20</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Libp2p</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">QUIC Transport</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Tensor Parallel</span>
+            </div>
+          </div>
+          <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between font-mono text-xs">
+            <span class="text-espresso-muted group-hover:text-espresso">Role: Distributed Lead</span>
+            <span class="text-terracotta font-semibold text-sm">SPEC INSPECTOR →</span>
+          </div>
+        </article>
+
+        <!-- 4. UltraVox -->
+        <article data-category="ai" class="project-card border border-rule bg-linen p-6 flex flex-col justify-between hover:border-espresso transition-all group cursor-pointer relative" onclick="openSpecModal('ultravox')">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[11px] text-espresso-muted pb-4 border-b border-rule">
+              <span class="font-bold text-forest">AI-VOX // ULTRA</span>
+              <span>2026</span>
+            </div>
+            <div class="mt-5">
+              <h3 class="font-serif text-2xl text-espresso group-hover:text-terracotta transition-colors">UltraVox Voice Engine</h3>
+              <p class="font-mono text-xs text-espresso-muted mt-3 leading-relaxed">
+                Sub-80ms full-duplex streaming voice synthesis and acoustic turn-taking engine. Combines low-frame VAD with direct neural vocoding to support instantaneous human-grade conversational interruptions.
+              </p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-1.5 font-mono text-[10px]">
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Python / C</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">WebRTC Native</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Silero VAD</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Streaming ONNX</span>
+            </div>
+          </div>
+          <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between font-mono text-xs">
+            <span class="text-espresso-muted group-hover:text-espresso">Role: Audio AI Engineer</span>
+            <span class="text-terracotta font-semibold text-sm">SPEC INSPECTOR →</span>
+          </div>
+        </article>
+
+        <!-- 5. ChronoVision -->
+        <article data-category="ai" class="project-card border border-rule bg-linen p-6 flex flex-col justify-between hover:border-espresso transition-all group cursor-pointer relative" onclick="openSpecModal('chronovision')">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[11px] text-espresso-muted pb-4 border-b border-rule">
+              <span class="font-bold text-terracotta">VIS-05 // PERCEPTION</span>
+              <span>2025</span>
+            </div>
+            <div class="mt-5">
+              <h3 class="font-serif text-2xl text-espresso group-hover:text-terracotta transition-colors">ChronoVision Analyzer</h3>
+              <p class="font-mono text-xs text-espresso-muted mt-3 leading-relaxed">
+                Low-latency multi-modal temporal analyzer for high-speed industrial robotics. Correlates continuous frame feeds with telemetry time-series to detect micro-deviations under 15ms.
+              </p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-1.5 font-mono text-[10px]">
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">PyTorch / C++</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">TensorRT</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Vision Transformer</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">CUDA Pipelines</span>
+            </div>
+          </div>
+          <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between font-mono text-xs">
+            <span class="text-espresso-muted group-hover:text-espresso">Role: Vision &amp; ML Lead</span>
+            <span class="text-terracotta font-semibold text-sm">SPEC INSPECTOR →</span>
+          </div>
+        </article>
+
+        <!-- 6. VectorSync -->
+        <article data-category="systems" class="project-card border border-rule bg-linen p-6 flex flex-col justify-between hover:border-espresso transition-all group cursor-pointer relative" onclick="openSpecModal('vectorsync')">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[11px] text-espresso-muted pb-4 border-b border-rule">
+              <span class="font-bold text-forest">DATA-06 // HIGH-THROUGHPUT</span>
+              <span>2026</span>
+            </div>
+            <div class="mt-5">
+              <h3 class="font-serif text-2xl text-espresso group-hover:text-terracotta transition-colors">VectorSync Indexer</h3>
+              <p class="font-mono text-xs text-espresso-muted mt-3 leading-relaxed">
+                High-throughput embedded vector indexer and ANN replication engine. Features zero-copy memory mapping, SIMD-accelerated distance computation, and write-ahead log consensus.
+              </p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-1.5 font-mono text-[10px]">
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Rust (AVX-512)</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">HNSW Graph</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Mmap Engine</span>
+              <span class="px-2 py-0.5 bg-stone-tag text-espresso border border-linen-border">Raft Consensus</span>
+            </div>
+          </div>
+          <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between font-mono text-xs">
+            <span class="text-espresso-muted group-hover:text-espresso">Role: Storage Engine Dev</span>
+            <span class="text-terracotta font-semibold text-sm">SPEC INSPECTOR →</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================= TECHNICAL SPECIFICATION SHEET ================= -->
+    <section id="architecture" class="py-16 border-b border-rule">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-4">
+          <span class="text-[11px] font-mono uppercase tracking-widest-tech text-terracotta block mb-2 font-semibold">03 / TECHNICAL SPEC SHEET</span>
+          <h2 class="font-serif text-3xl sm:text-4xl text-espresso font-normal">Foundational Capabilities</h2>
+          <p class="font-mono text-xs text-espresso-muted mt-3 leading-relaxed">
+            Architectural decisions prioritize deterministic behavior, explicit resource utilization, bare-metal acceleration, and complete auditability.
+          </p>
+
+          <div class="mt-6 p-4 border border-rule bg-linen-dim text-xs font-mono space-y-2">
+            <div class="flex justify-between text-espresso-muted">
+              <span>TARGET PLATFORMS:</span>
+              <span class="text-espresso font-medium">Linux x86_64, aarch64</span>
+            </div>
+            <div class="flex justify-between text-espresso-muted">
+              <span>INTERCONNECT:</span>
+              <span class="text-espresso font-medium">gRPC, QUIC, WebRTC</span>
+            </div>
+            <div class="flex justify-between text-espresso-muted">
+              <span>SECURITY MODEL:</span>
+              <span class="text-espresso font-medium">Zero-Trust &amp; TPM Enclave</span>
+            </div>
+            <div class="flex justify-between text-espresso-muted">
+              <span>COMPUTE PARADIGM:</span>
+              <span class="text-forest font-medium">Local-First / Distributed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capability Matrix Columns -->
+        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6 font-mono text-xs">
+          
+          <div class="border border-rule p-5 bg-linen flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] tracking-widest-tech text-terracotta font-bold uppercase block mb-3">// SYSTEMS &amp; LOW LEVEL</span>
+              <ul class="space-y-2.5 text-espresso">
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-espresso"></span>Rust (Async &amp; SIMD)</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-espresso"></span>Modern C++ (C++20)</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-espresso"></span>Linux eBPF &amp; XDP</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-espresso"></span>Go Concurrency Runtimes</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-espresso"></span>Zero-Copy Memory (mmap)</li>
+              </ul>
+            </div>
+            <div class="mt-6 pt-3 border-t border-rule text-[10px] text-espresso-muted">
+              DETERMINISTIC LATENCY
+            </div>
+          </div>
+
+          <div class="border border-rule p-5 bg-linen flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] tracking-widest-tech text-forest font-bold uppercase block mb-3">// AI &amp; PERCEPTUAL ML</span>
+              <ul class="space-y-2.5 text-espresso">
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-forest"></span>Sub-80ms Streaming TTS</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-forest"></span>PyTorch &amp; TensorRT</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-forest"></span>Local LLM Quantization</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-forest"></span>VAD Acoustic Turn-Taking</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-forest"></span>HNSW Vector Indexing</li>
+              </ul>
+            </div>
+            <div class="mt-6 pt-3 border-t border-rule text-[10px] text-espresso-muted">
+              REAL-TIME INFERENCE
+            </div>
+          </div>
+
+          <div class="border border-rule p-5 bg-linen flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] tracking-widest-tech text-espresso font-bold uppercase block mb-3">// DEFENSIVE &amp; DISTRIBUTED</span>
+              <ul class="space-y-2.5 text-espresso">
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-terracotta"></span>TPM 2.0 &amp; Shamir Keys</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-terracotta"></span>P2P Libp2p Topologies</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-terracotta"></span>Raft Consensus Protocols</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-terracotta"></span>WireGuard Tunneling</li>
+                <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-terracotta"></span>cgroups v2 Sandboxing</li>
+              </ul>
+            </div>
+            <div class="mt-6 pt-3 border-t border-rule text-[10px] text-espresso-muted">
+              SURVIVABLE RESILIENCE
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= INTERACTIVE CLI / TELEMETRY CONSOLE ================= -->
+    <section class="py-16 border-b border-rule">
+      <div class="border border-espresso bg-espresso text-linen p-6 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-espresso-muted/60 gap-4">
+          <div class="flex items-center gap-3">
+            <span class="w-3 h-3 bg-terracotta inline-block"></span>
+            <span class="font-mono text-xs tracking-widest-tech uppercase text-linen font-bold">SYSTEM TELEMETRY CONSOLE</span>
+          </div>
+          <div class="font-mono text-[11px] text-stone-tag flex items-center gap-4">
+            <span>OPERATOR: GARVIT DEORAH</span>
+            <span>NODE: autonomous-core-01</span>
+          </div>
+        </div>
+
+        <!-- Terminal Output -->
+        <div id="terminal-body" class="font-mono text-xs my-6 space-y-2 min-h-[140px] text-stone-tag overflow-y-auto max-h-[220px]">
+          <p class="text-espresso-muted">// Garvit Deorah Telemetry Console v3.1 initialized.</p>
+          <p class="text-linen"><span class="text-terracotta">&gt;</span> System status: NOMINAL &bull; 6 Verified Project Dossiers Indexed.</p>
+          <p class="text-linen"><span class="text-terracotta">&gt;</span> Type <span class="text-white underline font-semibold cursor-pointer" onclick="runCommand('help')">'help'</span>, <span class="text-white underline font-semibold cursor-pointer" onclick="runCommand('projects')">'projects'</span>, <span class="text-white underline font-semibold cursor-pointer" onclick="runCommand('skills')">'skills'</span>, <span class="text-white underline font-semibold cursor-pointer" onclick="runCommand('contact')">'contact'</span>, or <span class="text-white underline font-semibold cursor-pointer" onclick="runCommand('clear')">'clear'</span>.</p>
+        </div>
+
+        <!-- Terminal Input -->
+        <form id="terminal-form" class="flex items-center gap-2 pt-2 border-t border-espresso-muted/40" onsubmit="handleTerminalSubmit(event)">
+          <span class="text-terracotta font-mono text-sm font-bold">&gt;</span>
+          <input 
+            type="text" 
+            id="terminal-input" 
+            autocomplete="off" 
+            spellcheck="false" 
+            placeholder="Type command and press Enter..." 
+            class="w-full bg-transparent border-none text-linen font-mono text-xs focus:ring-0 focus:outline-none placeholder:text-espresso-muted"
+          />
+          <button type="submit" class="px-3 py-1 bg-stone-tag text-espresso font-mono text-[11px] font-bold uppercase hover:bg-terracotta hover:text-linen transition-colors">
+            EXEC
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= DIRECT TRANSMISSION / CONTACT ================= -->
+    <section id="contact" class="py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-5">
+          <span class="text-[11px] font-mono uppercase tracking-widest-tech text-terracotta block mb-2 font-semibold">04 / DISPATCH &amp; COMMS</span>
+          <h2 class="font-serif text-4xl sm:text-5xl text-espresso font-normal leading-tight">Initiate Transmission.</h2>
+          <p class="font-mono text-xs text-espresso-muted mt-4 leading-relaxed">
+            Interested in deploying high-scale AI infrastructure, securing embedded attack surfaces, or establishing novel research collaborations? Transmit a direct dispatch below.
+          </p>
+
+          <div class="mt-8 space-y-3 font-mono text-xs">
+            <div class="flex items-center justify-between p-3 border border-rule bg-linen-dim">
+              <span class="text-espresso-muted">PRIMARY DISPATCH:</span>
+              <button onclick="copyToClipboard('garvitdeorah@gmail.com', this)" class="text-espresso font-bold hover:text-terracotta transition-colors flex items-center gap-1.5">
+                <span>garvitdeorah@gmail.com</span>
+                <span class="text-[10px] text-terracotta font-semibold">📋 COPY</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between p-3 border border-rule bg-linen-dim">
+              <span class="text-espresso-muted">OPERATIONAL FOCUS:</span>
+              <span class="text-espresso font-bold">Systems &amp; Applied AI</span>
+            </div>
+            <div class="flex items-center justify-between p-3 border border-rule bg-linen-dim">
+              <span class="text-espresso-muted">PGP FINGERPRINT:</span>
+              <span class="text-espresso font-mono text-[11px]">8F2C 1904 AA29 55C1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form Card -->
+        <div class="lg:col-span-7 border border-rule bg-linen p-6 md:p-8">
+          <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5 font-mono text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-espresso-muted text-[10px] uppercase tracking-widest-tech mb-1.5">OPERATOR / SENDER NAME *</label>
+                <input required type="text" id="form-name" class="w-full bg-linen-dim border border-rule px-3 py-2.5 text-espresso text-xs rounded-none focus:border-espresso focus:bg-white focus:outline-none" placeholder="e.g. Elena Rostova">
+              </div>
+              <div>
+                <label class="block text-espresso-muted text-[10px] uppercase tracking-widest-tech mb-1.5">RETURN SIGNAL (EMAIL) *</label>
+                <input required type="email" id="form-email" class="w-full bg-linen-dim border border-rule px-3 py-2.5 text-espresso text-xs rounded-none focus:border-espresso focus:bg-white focus:outline-none" placeholder="elena@domain.net">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-espresso-muted text-[10px] uppercase tracking-widest-tech mb-1.5">COLLABORATION CATEGORY</label>
+              <select id="form-topic" class="w-full bg-linen-dim border border-rule px-3 py-2.5 text-espresso text-xs rounded-none focus:border-espresso focus:bg-white focus:outline-none">
+                <option value="systems">Low-Latency Infrastructure &amp; P2P Mesh</option>
+                <option value="voice">Streaming Voice AI &amp; Perception Engines</option>
+                <option value="security">eBPF Security &amp; Cryptographic Architecture</option>
+                <option value="general">Advisory &amp; Systems Consulting</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-espresso-muted text-[10px] uppercase tracking-widest-tech mb-1.5">SPECIFICATION BRIEF / TRANSMISSION *</label>
+              <textarea required id="form-message" rows="4" class="w-full bg-linen-dim border border-rule p-3 text-espresso text-xs rounded-none focus:border-espresso focus:bg-white focus:outline-none" placeholder="Outline architectural constraints, latency requirements, or project engagement scope..."></textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-[10px] text-espresso-muted font-mono">RESPONSE WINDOW: &lt; 24H UTC</span>
+              <button type="submit" class="px-6 py-3 bg-espresso text-linen font-mono text-xs uppercase tracking-widest-tech border border-espresso hover:bg-terracotta hover:border-terracotta transition-all shadow-sm">
+                TRANSMIT MESSAGE →
+              </button>
+            </div>
+
+            <div id="form-status" class="hidden p-3 border font-mono text-xs"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= EDITORIAL FOOTER ================= -->
+  <footer class="border-t border-rule bg-linen-dim py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-rule">
+        <div>
+          <span class="font-serif text-2xl text-espresso">Garvit Deorah</span>
+          <p class="font-mono text-xs text-espresso-muted mt-1">Independent Systems Engineer &amp; Applied AI Researcher</p>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-6 font-mono text-xs">
+          <a href="#hero" class="hover:text-terracotta transition-colors">TOP ↑</a>
+          <a href="#work" class="hover:text-terracotta transition-colors">SYSTEMS</a>
+          <a href="#manifesto" class="hover:text-terracotta transition-colors">PRINCIPLES</a>
+          <button onclick="openSpecModal('shadow-guardian')" class="text-terracotta hover:underline font-semibold">INSPECT SPECS</button>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-espresso-muted">
+        <div>
+          &copy; <span id="current-year">2026</span> Garvit Deorah. Built with intentional craft. Independent Architecture.
+        </div>
+        <div class="flex items-center gap-4">
+          <span>LATENCY: ZERO BLOAT</span>
+          <span class="text-terracotta">&bull;</span>
+          <span>DETERMINISTIC SYSTEMS</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= INTERACTIVE SPECIFICATION DRAWER / MODAL ================= -->
+  <div id="spec-modal" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0">
+    <div id="modal-backdrop" onclick="closeSpecModal()" class="absolute inset-0 bg-espresso/60 backdrop-blur-xs transition-opacity cursor-pointer"></div>
+    
+    <div id="modal-panel" class="drawer-panel drawer-closed absolute right-0 top-0 bottom-0 w-full max-w-xl bg-linen border-l border-espresso p-6 sm:p-8 flex flex-col justify-between overflow-y-auto pointer-events-auto shadow-2xl">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-rule">
+          <div class="flex items-center gap-2 font-mono text-xs">
+            <span class="w-2.5 h-2.5 bg-terracotta"></span>
+            <span id="modal-tag" class="font-bold tracking-widest-tech uppercase text-espresso">SPEC SHEET // INSPECTOR</span>
+          </div>
+          <button onclick="closeSpecModal()" class="font-mono text-xs p-1.5 hover:bg-stone-tag border border-rule text-espresso px-2">
+            ESC [×]
+          </button>
+        </div>
+
+        <div id="modal-content" class="mt-6 font-mono text-xs space-y-6">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-rule flex items-center justify-between font-mono text-xs">
+        <span class="text-espresso-muted" id="modal-status">VERIFIED SYSTEM RECORD</span>
+        <button onclick="closeSpecModal()" class="px-4 py-2 bg-espresso text-linen hover:bg-terracotta transition-colors text-xs font-bold uppercase tracking-wider">
+          CLOSE INSPECTOR
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CORE INTERACTION LOGIC & WEB AUDIO API ================= -->
+  <script>
+    /* 1. TACTILE AUDIO SYNTHESIZER (Web Audio API) */
+    let audioContext = null;
+    let soundEnabled = false;
+
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTactileClick(freq = 640, duration = 0.02, type = 'sine') {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+        
+        gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.start();
+        osc.stop(audioContext.currentTime + duration);
+      } catch (e) {
+        // Audio policy safe
+      }
+    }
+
+    const audioToggleBtn = document.getElementById('audio-toggle');
+    const audioStateText = document.getElementById('audio-state');
+    const audioIcon = document.getElementById('audio-icon');
+
+    audioToggleBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      if (soundEnabled) {
+        initAudio();
+        audioStateText.innerText = 'SOUND: ON';
+        audioIcon.innerText = '🔊';
+        audioToggleBtn.classList.add('bg-forest/10', 'text-forest');
+        playTactileClick(880, 0.035);
+      } else {
+        audioStateText.innerText = 'SOUND: OFF';
+        audioIcon.innerText = '🔈';
+        audioToggleBtn.classList.remove('bg-forest/10', 'text-forest');
+      }
+    });
+
+    document.querySelectorAll('button, a, .project-card, .filter-pill').forEach(el => {
+      el.addEventListener('click', () => {
+        playTactileClick(700, 0.015);
+      });
+    });
+
+    /* 2. REAL-TIME CLOCKS */
+    function updateClocks() {
+      const now = new Date();
+      const locStr = now.toLocaleTimeString('en-US', { hour12: false });
+      const localEl = document.getElementById('clock-local');
+      if (localEl) localEl.textContent = locStr;
+
+      const hours = String(now.getUTCHours()).padStart(2, '0');
+      const mins = String(now.getUTCMinutes()).padStart(2, '0');
+      const secs = String(now.getUTCSeconds()).padStart(2, '0');
+      const utcEl = document.getElementById('clock-utc');
+      if (utcEl) utcEl.textContent = `${hours}:${mins}:${secs}`;
+    }
+    setInterval(updateClocks, 1000);
+    updateClocks();
+
+    /* 3. CATEGORY FILTERING */
+    const filterButtons = document.querySelectorAll('.filter-pill');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-espresso', 'text-linen', 'active');
+          b.classList.add('bg-linen', 'text-espresso');
+        });
+        btn.classList.add('bg-espresso', 'text-linen', 'active');
+        btn.classList.remove('bg-linen', 'text-espresso');
+
+        const filter = btn.getAttribute('data-filter');
+        projectCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    /* 4. SPECIFICATION DOSSIER REPOSITORY */
+    const dossiers = {
+      'shadow-guardian': {
+        tag: 'SEC-01 // PRODUCTION SYSTEM',
+        title: 'Shadow Guardian',
+        subtitle: 'Autonomous Network Security Monitor & Endpoint Sentinel',
+        role: 'Systems Architect',
+        year: '2025 - Present',
+        description: 'An autonomous host-level containment mechanism built for zero-trust computing spaces. Shadow Guardian attaches eBPF probes directly into Linux kernel socket abstractions to detect lateral traversal, unlinked memory modifications, and unauthorized binary spawns without user-space overhead.',
+        specs: [
+          { label: 'Syscall Overhead', val: '< 0.78% total overhead' },
+          { label: 'Detection Plane', val: 'Low-footprint ring buffer stream' },
+          { label: 'Containment Action', val: 'cgroup freeze within 3.8ms' },
+          { label: 'Verification Protocol', val: 'Cryptographic hash log chain' }
+        ],
+        codeSnippet: `SEC("tracepoint/syscalls/sys_enter_execve")
+int trace_execve(struct trace_event_raw_sys_enter* ctx) {
+    u64 pid_tgid = bpf_get_current_pid_tgid();
+    if (is_quarantined(pid_tgid >> 32)) {
+        bpf_send_signal(9); // Immediate SIGKILL
+        return 0;
+    }
+    return evaluate_anomaly(ctx);
+}`
+      },
+      'secreto-sperren': {
+        tag: 'CRYPT-02 // SECURITY CORE',
+        title: 'Secreto Sperren',
+        subtitle: 'Zero-Knowledge Credential Orchestrator',
+        role: 'Cryptographic Engineer',
+        year: '2024 - 2025',
+        description: 'Hardware-entangled secret encapsulation suite. Employs split-key threshold cryptography to prevent catastrophic data exposure under hostile virtualization environments. Reconstructs ephemeral secrets strictly in protected volatile registers.',
+        specs: [
+          { label: 'Cipher Suite', val: 'ChaCha20-Poly1305 & AES-256-GCM' },
+          { label: 'Hardware Anchor', val: 'TPM 2.0 / Apple Secure Enclave' },
+          { label: 'Threshold Scheme', val: 'k-of-n polynomial interpolation' },
+          { label: 'Memory Guard', val: 'Immediate mlock and explicit zeroization' }
+        ],
+        codeSnippet: `func Encapsulate(secret []byte, n, k byte) ([][]byte, error) {
+    poly, err := generateRandomPolynomial(k-1, secret[0])
+    if err != nil { return nil, err }
+    shares := evaluatePoints(poly, n)
+    memguard.PurgeBuffer(secret)
+    return shares, nil
+}`
+      },
+      'netmind': {
+        tag: 'DIST-03 // DISTRIBUTED MESH',
+        title: 'NetMind Mesh',
+        subtitle: 'Distributed Local LLM Compute Mesh',
+        role: 'Distributed Systems Lead',
+        year: '2025',
+        description: 'A dynamic peer-to-peer execution scheduler coordinating tensor-parallel inference across heterogeneous local nodes. Features automatic route recalculation and gossip topology optimization during node partition events.',
+        specs: [
+          { label: 'Protocol Stack', val: 'QUIC multiplexing, Libp2p' },
+          { label: 'Consensus Mode', val: 'Gossip-sub with dynamic tree pruning' },
+          { label: 'Failover Horizon', val: '< 45ms route recalculation' },
+          { label: 'Binary Footprint', val: 'Lightweight static binary (< 12MB)' }
+        ],
+        codeSnippet: `void MeshRouter::dispatchHeartbeat() {
+    auto peers = topology_->getHealthyNeighbors();
+    for (const auto& peer : peers) {
+        quic_stream_->sendGossipPing(peer.id(), local_vector_clock_);
+    }
+}`
+      },
+      'ultravox': {
+        tag: 'AI-VOX // VOICE RUNTIME',
+        title: 'UltraVox Voice Engine',
+        subtitle: 'Sub-80ms Streaming Voice Synthesis Engine',
+        role: 'Audio AI Engineer',
+        year: '2026',
+        description: 'Full-duplex real-time conversational voice pipeline with ultra-low latency acoustic turn-taking. Couples lightweight neural vocoders with streaming Silero VAD to achieve human-level duplex conversation with sub-80ms turnaround.',
+        specs: [
+          { label: 'End-to-End Latency', val: '74ms average roundtrip' },
+          { label: 'VAD Granularity', val: '20ms frame evaluation' },
+          { label: 'Streaming Mode', val: 'Continuous WebRTC DataChannel' },
+          { label: 'TTS Engine', val: 'Quantized Streaming Vocoder (ONNX)' }
+        ],
+        codeSnippet: `async def stream_audio_duplex(websocket):
+    vad = SileroVAD(threshold=0.65)
+    async for chunk in websocket.iter_bytes():
+        if vad.is_speech(chunk):
+            await agent_runtime.interrupt_and_listen()
+            await pcm_buffer.push(chunk)`
+      },
+      'chronovision': {
+        tag: 'VIS-05 // TEMPORAL ML',
+        title: 'ChronoVision Analyzer',
+        subtitle: 'Low-Latency Multi-Modal Temporal Analyzer',
+        role: 'Computer Vision & ML Lead',
+        year: '2025',
+        description: 'Synchronized visual and time-series perception module for low-power edge compute units. Employs temporal transformers on quantized image backbones for microsecond anomaly detection and robotic trajectory stabilization.',
+        specs: [
+          { label: 'Frame Rate', val: '60 FPS INT8 on mobile SoC' },
+          { label: 'Detection Speed', val: '< 15ms frame-to-signal latency' },
+          { label: 'Backbone', val: 'Quantized Temporal Transformer' },
+          { label: 'Output Stream', val: 'Zero-copy shared memory queues' }
+        ],
+        codeSnippet: `cv::Mat frame;
+auto tensor = preprocessor->toDeviceTensor(frame);
+auto anomaly_score = temporal_engine->forward(tensor);
+if (anomaly_score > threshold) {
+    hardware_bus->tripSafeBrake();
+}`
+      },
+      'vectorsync': {
+        tag: 'DATA-06 // HIGH-THROUGHPUT',
+        title: 'VectorSync Indexer',
+        subtitle: 'High-Throughput Vector Indexer & Storage Engine',
+        role: 'Storage Engine Developer',
+        year: '2026',
+        description: 'High-throughput embedded vector indexer designed for local-first retrieval augmented workflows. Combines AVX-512 SIMD vector distance calculations with a memory-mapped HNSW graph structure.',
+        specs: [
+          { label: 'Search Latency', val: '0.42ms for 1M 1536-dim vectors' },
+          { label: 'SIMD Acceleration', val: 'AVX-512 / ARM Neon auto-dispatch' },
+          { label: 'Index Memory', val: 'Zero-copy read via mmap' },
+          { label: 'Durability', val: 'Append-only WAL with Raft log' }
+        ],
+        codeSnippet: `#[inline(always)]
+pub unsafe fn dot_product_avx512(a: &[f32], b: &[f32]) -> f32 {
+    let mut sum = _mm512_setzero_ps();
+    for i in (0..a.len()).step_by(16) {
+        let va = _mm512_loadu_ps(a.as_ptr().add(i));
+        let vb = _mm512_loadu_ps(b.as_ptr().add(i));
+        sum = _mm512_fmadd_ps(va, vb, sum);
+    }
+    _mm512_reduce_add_ps(sum)
+}`
+      }
+    };
+
+    const modal = document.getElementById('spec-modal');
+    const modalPanel = document.getElementById('modal-panel');
+    const modalContent = document.getElementById('modal-content');
+    const modalTag = document.getElementById('modal-tag');
+
+    function openSpecModal(key) {
+      playTactileClick(850, 0.025);
+      const data = dossiers[key] || dossiers['shadow-guardian'];
+      modalTag.textContent = data.tag;
+
+      modalContent.innerHTML = `
+        <div>
+          <h2 class="font-serif text-3xl text-espresso font-normal">${data.title}</h2>
+          <div class="text-terracotta font-semibold mt-1 text-xs tracking-wider">${data.subtitle}</div>
+          <div class="flex items-center gap-4 text-[11px] text-espresso-muted mt-2 border-b border-rule pb-3">
+            <span>ROLE: ${data.role}</span>
+            <span>TIMELINE: ${data.year}</span>
+          </div>
+        </div>
+
+        <p class="text-espresso-muted leading-relaxed font-light">
+          ${data.description}
+        </p>
+
+        <div class="border border-rule bg-linen-dim p-4">
+          <div class="text-[10px] uppercase font-bold tracking-widest-tech text-espresso mb-3">SYSTEM PERFORMANCE MATRIX</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
+            ${data.specs.map(s => `
+              <div class="border-b border-rule/70 pb-1">
+                <span class="text-espresso-muted block text-[10px]">${s.label}</span>
+                <span class="text-espresso font-semibold">${s.val}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div>
+          <div class="text-[10px] uppercase font-bold tracking-widest-tech text-espresso mb-2">RUN-LEVEL CODE EXCERPT</div>
+          <pre class="bg-espresso text-stone-tag p-4 text-[11px] overflow-x-auto border border-espresso leading-snug"><code>${escapeHTML(data.codeSnippet)}</code></pre>
+        </div>
+      `;
+
+      modal.classList.remove('pointer-events-none', 'opacity-0');
+      modal.classList.add('opacity-100');
+      modalPanel.classList.remove('drawer-closed');
+      modalPanel.classList.add('drawer-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSpecModal() {
+      playTactileClick(450, 0.02);
+      modalPanel.classList.remove('drawer-open');
+      modalPanel.classList.add('drawer-closed');
+      modal.classList.remove('opacity-100');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSpecModal();
+    });
+
+    document.getElementById('toggle-spec-btn').addEventListener('click', () => {
+      openSpecModal('shadow-guardian');
+    });
+
+    function escapeHTML(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    /* 5. INTERACTIVE CLI CONSOLE */
+    const terminalBody = document.getElementById('terminal-body');
+    const terminalInput = document.getElementById('terminal-input');
+
+    function appendTerminal(html) {
+      const p = document.createElement('div');
+      p.innerHTML = html;
+      terminalBody.appendChild(p);
+      terminalBody.scrollTop = terminalBody.scrollHeight;
+    }
+
+    function runCommand(rawCmd) {
+      const cmd = rawCmd.trim().toLowerCase();
+      appendTerminal(`<span class="text-terracotta">&gt;</span> <span class="text-white">${escapeHTML(cmd)}</span>`);
+      playTactileClick(900, 0.015);
+
+      switch (cmd) {
+        case 'help':
+          appendTerminal(`
+            <div class="text-stone-tag space-y-1">
+              <div>AVAILABLE SYSTEM INSTRUCTIONS:</div>
+              <div>&bull; <span class="text-white font-semibold">projects</span> - Enumerate verified engineering projects</div>
+              <div>&bull; <span class="text-white font-semibold">skills</span>   - List systems, AI, and security matrix</div>
+              <div>&bull; <span class="text-white font-semibold">contact</span>  - Retrieve secure dispatch channels</div>
+              <div>&bull; <span class="text-white font-semibold">inspect</span>  - Open project specification drawer</div>
+              <div>&bull; <span class="text-white font-semibold">clear</span>    - Reset terminal buffer</div>
+            </div>
+          `);
+          break;
+        case 'projects':
+          appendTerminal(`
+            <div class="text-stone-tag space-y-1">
+              <div>[01] Shadow Guardian  - Autonomous Network Sentinel (Rust / eBPF)</div>
+              <div>[02] Secreto Sperren  - Zero-Knowledge Credential Orchestrator (Go / TPM 2.0)</div>
+              <div>[03] NetMind Mesh     - Distributed Local LLM Compute Fabric (C++20 / QUIC)</div>
+              <div>[04] UltraVox Voice   - Sub-80ms Streaming Voice Engine (Python / WebRTC)</div>
+              <div>[05] ChronoVision     - Low-Latency Multi-Modal Temporal Analyzer (PyTorch)</div>
+              <div>[06] VectorSync       - High-Throughput Vector Indexer (Rust / AVX-512)</div>
+            </div>
+          `);
+          break;
+        case 'skills':
+          appendTerminal(`
+            <div class="text-stone-tag">
+              <div>SYSTEMS:  Rust, Modern C++ (C++20), Go, Linux eBPF, QUIC, POSIX, mmap</div>
+              <div>AI/VOX:   Sub-80ms Streaming TTS, Silero VAD, PyTorch, TensorRT, Quantization</div>
+              <div>SECURITY: Zero-Trust Isolation, TPM 2.0, Shamir Secret Sharing, cgroups</div>
+            </div>
+          `);
+          break;
+        case 'contact':
+          appendTerminal(`
+            <div class="text-stone-tag">
+              <div>Email: <span class="text-terracotta">garvitdeorah@gmail.com</span></div>
+              <div>Fingerprint: 8F2C 1904 AA29 55C1</div>
+              <div>Status: Available for select architecture engagements.</div>
+            </div>
+          `);
+          break;
+        case 'inspect':
+          openSpecModal('shadow-guardian');
+          appendTerminal(`<span class="text-forest">Inspector drawer engaged.</span>`);
+          break;
+        case 'clear':
+          terminalBody.innerHTML = '';
+          appendTerminal(`<span class="text-espresso-muted">// Console buffer reset. Type 'help' for instructions.</span>`);
+          break;
+        default:
+          appendTerminal(`<span class="text-terracotta">Command not recognized: '${escapeHTML(cmd)}'. Type 'help' for instruction list.</span>`);
+      }
+    }
+
+    function handleTerminalSubmit(e) {
+      e.preventDefault();
+      const val = terminalInput.value;
+      if (!val.trim()) return;
+      runCommand(val);
+      terminalInput.value = '';
+    }
+
+    /* 6. CLIPBOARD COPY UTILITY */
+    function copyToClipboard(text, btnElement) {
+      playTactileClick(1000, 0.02);
+      const tempInput = document.createElement('input');
+      tempInput.style.position = 'absolute';
+      tempInput.style.left = '-9999px';
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      
+      try {
+        document.execCommand('copy');
+        if (btnElement) {
+          const originalHTML = btnElement.innerHTML;
+          btnElement.innerHTML = `<span>COPIED TO BUFFER!</span>`;
+          setTimeout(() => {
+            btnElement.innerHTML = originalHTML;
+          }, 2000);
+        }
+      } catch (err) {
+        console.error('Copy fallback failed', err);
+      } finally {
+        document.body.removeChild(tempInput);
+      }
+    }
+
+    const heroCopyBtn = document.getElementById('copy-email-hero');
+    if (heroCopyBtn) {
+      heroCopyBtn.addEventListener('click', function() {
+        const email = this.getAttribute('data-copy');
+        const textSpan = document.getElementById('hero-copy-text');
+        copyToClipboard(email);
+        textSpan.innerText = 'COPIED TO CLIPBOARD';
+        setTimeout(() => {
+          textSpan.innerText = email;
+        }, 2200);
+      });
+    }
+
+    /* 7. CONTACT FORM HANDLER */
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      playTactileClick(900, 0.03);
+      const name = document.getElementById('form-name').value;
+      const email = document.getElementById('form-email').value;
+      const statusDiv = document.getElementById('form-status');
+
+      statusDiv.className = 'p-3 border font-mono text-xs bg-forest-light border-forest text-forest flex items-center justify-between';
+      statusDiv.innerHTML = `
+        <span>✓ TRANSMISSION LOGGED: Acknowledged, ${escapeHTML(name)}. Direct response queued to ${escapeHTML(email)}.</span>
+        <span class="text-[10px] uppercase font-bold">200 OK</span>
+      `;
+      statusDiv.classList.remove('hidden');
+
+      document.getElementById('contact-form').reset();
+    }
+  </script>
+</body>
+</html>
